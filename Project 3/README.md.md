@@ -1,4 +1,4 @@
-# Project 3: V-Plot Generation & Genomic Landmark Analysis Suite
+# Project 3: V-Plot Generation
 
 ## Overview
 **Project 3** is a bioinformatics toolkit designed for generating **V-plots** (fragment length versus distance from a genomic landmark). It is commonly used in ATAC-seq, ChIP-seq, and nucleosome positioning analyses to visualize how genomic fragments (such as transcription factor binding sites or nucleosomes) are distributed around reference landmark centers.
