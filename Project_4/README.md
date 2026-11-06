@@ -1,28 +1,71 @@
-# Project 4: GDC RNA-Seq Gene Expression Dataset
+# Project 4: TCGA-LUAD NKX2-1 Expression Analysis
 
 ## Overview
-**Project 4** contains a collection of RNA-Seq data files downloaded from the Genomic Data Commons (GDC). This dataset consists of gene expression counts processed using the STAR aligner and GENCODE annotations.
+**Project 4** is a bioinformatics pipeline focused on analyzing **NKX2-1** gene expression in Lung Adenocarcinoma (TCGA-LUAD) datasets. The workflow parses RNA-Seq count files downloaded from the Genomic Data Commons (GDC), performs statistical testing (Welch's two-sample t-test), and generates visualization plots.
 
 ## Project Structure
-The project is structured as a series of case-specific directories. Each directory typically contains:
-- **`*.rna_seq.augmented_star_gene_counts.tsv`**: The primary gene expression count file.
-- **`logs/`**: Directory containing metadata and processing logs (`*.parcel` files).
-- **`annotations.txt` (Optional)**: Clinical or case-level annotations associated with the sample (e.g., prior malignancies, clinical status).
+```text
+Project 4/
+├── project4 (1).R                      # R script for extraction, statistics, and plotting
+├── gdc_sample_sheet.tsv                # Metadata manifest mapping sample types to files
+├── README.md                           # Project documentation
+└── [GDC Case Folders]/                  # Subdirectories containing STAR count TSVs
+    └── *.rna_seq.augmented_star_gene_counts.tsv
+```
 
-## Data Format
-The expression files are tab-separated value (TSV) files (`augmented_star_gene_counts.tsv`) with the following structure:
+---
 
-- **Header**: Contains metadata such as the gene model version (e.g., GENCODE v36).
-- **Columns**:
-    - `gene_id`: Ensembl gene identifier.
-    - `gene_name`: Official gene symbol.
-    - `gene_type`: Type of gene (e.g., protein_coding).
-    - `unstranded`, `stranded_first`, `stranded_second`: Raw read counts using different strand-specific library strategies.
-    - `tpm_unstranded`: Transcripts per million (unstranded).
-    - `fpkm_unstranded`: Fragments per kilobase million (unstranded).
-    - `fpkm_uq_unstranded`: FPKM upper-quartile normalized (unstranded).
+## Prerequisites (Linux)
+- **R (v4.0 or higher)**: Standard base R installation (`Rscript` binary in PATH).
+- **No extra R packages required**: The script relies exclusively on standard base R libraries (`stats`, `graphics`, `grDevices`).
 
-## Usage Notes
-- This is a raw data repository. Use these TSV files for downstream bioinformatics tasks such as differential gene expression analysis, clustering, or survival analysis.
-- When merging these datasets, ensure you handle the `gene_id` consistently, as each file contains the same set of genes based on the GENCODE reference.
-- Some samples may have associated clinical annotation files (`annotations.txt`) which can be mapped back to the case or sample identifiers in the count files.
+To verify R is installed on your Linux system:
+```bash
+Rscript --version
+```
+
+---
+
+## Running the Pipeline on Linux
+
+### Step 1: Navigate to Project Directory
+```bash
+cd /path/to/Project\ 4
+```
+
+### Step 2: Ensure Archive Extraction (If applicable)
+If your raw GDC data is compressed in a `.tar.gz` archive, extract it first:
+```bash
+tar -xzf tcga_data.tar.gz
+```
+
+### Step 3: Execute the R Script
+Run the analysis script via `Rscript`:
+```bash
+Rscript "Project_4_code"
+```
+
+---
+
+## Outputs Generated
+
+Upon execution, the script generates two main output files in the root directory:
+
+1. **`NKX2-1_expression_values.tsv`**
+   - Contains extracted raw TPM, `log2(TPM + 1)` values, sample types (*Primary Tumor* vs. *Solid Tissue Normal*), and file paths for all samples.
+
+2. **`NKX2-1_expression.png`**
+   - High-resolution boxplot comparing `log2(TPM + 1)` expression across sample groups with an annotated p-value from Welch's t-test.
+
+---
+
+## Additional OS Notes
+
+<details>
+<summary>Running on Windows (PowerShell)</summary>
+
+```powershell
+cd "C:\Users\soham\Downloads\Project 4"
+& "C:\Program Files\R\R-4.6.1\bin\Rscript.exe" "project4 (1).R"
+```
+</details>
